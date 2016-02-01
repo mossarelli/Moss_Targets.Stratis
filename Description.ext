@@ -1,0 +1,6 @@
+allowFunctionsRecompile = 0; //Turn this off when the script works before you use in in a multiplayer environment. Prevents hackers from recompiling the functions.
+
+class CfgFunctions
+{
+	#include "RifleTargets\cfgfunctions.hpp"
+};
