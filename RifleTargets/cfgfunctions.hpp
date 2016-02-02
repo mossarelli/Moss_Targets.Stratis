@@ -12,15 +12,9 @@ class Moss
 	{
 		file = "RifleTargets";
 		requiredAddons[] = {};
-		class CameraInit
-		{
-			description = "";
-		};
 		class GetRangeName
 		{
 			description = "";
-			preInit = 1;
-			recompile = 1;
 		};
 		class FallingTargetInit
 		{
@@ -38,7 +32,6 @@ class Moss
 		{
 			description = "";
 			preInit = 1;
-			recompile = 1;
 		};
 		class RegisterShooter
 		{

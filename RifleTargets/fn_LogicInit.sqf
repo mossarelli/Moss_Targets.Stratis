@@ -46,7 +46,6 @@ _PlateTargets = 0;
 _sign = objNull;
 _table = objNull;
 _box = objNull;
-_monitor = objNull;
 
 //Init all the objects.
 {
@@ -112,10 +111,6 @@ _monitor = objNull;
 	{
 		_x setObjectTexture [0,_texturename];
 	};
-	if (_x isKindOf MOSS_MonitorObject) then
-	{
-		_monitor = _x;
-	};
 } foreach _synced_objects_logic;
 
 //If target exists of type MOSS_TargetObject exists:
@@ -152,11 +147,6 @@ if (typeName _target != "SCALAR") then
 	if (!isNull _table) then
 	{
 		[_table,_weapon,_box] call Moss_fnc_WeaponOnTable;
-	};
-	
-	if (!isNull _monitor) then
-	{
-		["","","",[_monitor,_logic]] call Moss_fnc_CameraInit;
 	};
 };
 if true exitWith {};

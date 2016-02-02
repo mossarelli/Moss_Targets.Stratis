@@ -35,11 +35,3 @@ _object addAction [("<t color=""#FFFF66"">" + ("Register Rifleman") + "</t>"),Mo
 _object addAction [("<t color=""#FFFF66"">" + ("Show Score") + "</t>"),Moss_fnc_ShowScore,_logic];
 _object addAction [("<t color=""#FFFF66"">" + ("Reset my Score") + "</t>"),Moss_fnc_ResetScore,_logic];
 _object addAction [("<t color=""#FFFF66"">" + ("Unregister rifleman") + "</t>"),Moss_fnc_UnregisterShooter,_logic];
-
-if (!isNull _monitor) then
-{
-	[
-		format ["SignInit: %1!",_object]
-	] call BIS_fnc_errorMsg;
-	0 = _object addAction [("<t color=""#FFFF66"">" + ("Restart Camera") + "</t>"),Moss_fnc_CameraInit,[_monitor,_logic]];
-};

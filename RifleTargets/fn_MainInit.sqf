@@ -28,7 +28,6 @@ MOSS_PMagazine = "11Rnd_45ACP_Mag"; //The magazines to put in the box.
 
 //These two must be two different objects.
 MOSS_TargetObject = "SignAd_Sponsor_ARMEX_F"; //Type of Object for the target. Important for the init of the logic.
-MOSS_MonitorObject = "SignAd_Sponsor_ION_F"; //Type of Object for the Camera Monitor. Important for the init of the logic.
 
 //For falling targets
 MOSS_FallingTargetObject = //Type of Object for the target. Important for the init of the logic.
