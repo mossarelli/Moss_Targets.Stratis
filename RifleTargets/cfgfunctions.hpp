@@ -20,6 +20,7 @@ class Moss
 		{
 			description = "";
 			preInit = 1;
+			recompile = 1;
 		};
 		class FallingTargetInit
 		{
@@ -37,6 +38,7 @@ class Moss
 		{
 			description = "";
 			preInit = 1;
+			recompile = 1;
 		};
 		class RegisterShooter
 		{

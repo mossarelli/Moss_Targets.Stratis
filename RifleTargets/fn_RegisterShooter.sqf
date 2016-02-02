@@ -8,17 +8,17 @@
 		0: The name of the object the Action is on.
 		1: Object using the action
 		2: ID of the Action being Used
-		3: Additional Parameters
+		3: Logic Object
 
 	Returns:
 	N/A
 */
 
-private ["_name","_caller","_id","_params"];
+private ["_name","_caller","_id","_logic"];
 _name = _this select 0;
 _caller = _this select 1;
 _id = _this select 2;
-_params = _this select 3;
+_logic = _this select 3;
 
 //Get the current registered lane variable.
 _logicName = player GetVariable ["MossPlayerLogicName",""];
@@ -33,10 +33,10 @@ if ( !( str (_logicName) == str (""))) exitWith
 player setVariable ["MossShooterScoreInfo",[player],false];
 
 //Assign lane to player.
-player setVariable ["MossPlayerLogicName",_params,false];
+player setVariable ["MossPlayerLogicName",_logic,false];
 
 //Make a global message for everyone to see.
 call compile format ['
 	[{ systemChat "%1: %2 Registered. Score Reset."; }, "BIS_fnc_Spawn", true, false, false] call BIS_fnc_MP;
-	',(_params getVariable "MossRangeNumber"),(name _caller)
+	',(_logic getVariable "MossRangeNumber"),(name _caller)
 ];

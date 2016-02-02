@@ -6,48 +6,36 @@
 
 	Parameter(s):
 		0:	Logic Object.
+		1:	Weapon to use on table: "rifle", "pistol"
 
 	Returns:
 	N/A
 	
 	Usage:
 	Put the following line of code in the init of the logic object in the editor:
-	0 = [this] call Moss_fnc_LogicInit;
+	0 = [this,"rifle"] call Moss_fnc_LogicInit;
 */
 
-_logicname = [_this, 0, objNull, [objNull]] call BIS_fnc_param;
-_parameter = [_this, 1, "", [""]] call BIS_fnc_param;
+private ["_logic","_weapon"]; 
+_logic = [_this, 0, objNull, [objNull]] call BIS_fnc_param;
+_weapon = [_this, 1, "rifle", [""]] call BIS_fnc_param;
 
 //Error Message.
-if (isNull _logicname) exitWith
+if (isNull _logic) exitWith
 {
 	[
 		"Error: There's no Logic referred in the script. Make sure there's one Logic per firing lane."
 	] call BIS_fnc_errorMsg;
 };
 
-call compile format ['
-	[{ systemChat "LOGIC: %1"; }, "BIS_fnc_Spawn", true, false, false] call BIS_fnc_MP;
-	',_LogicName
-];
-if true exitWith {};
-
 //Init the Array for the targets. For each target synced to the logic, they will be added to this variable.
-_logicname setVariable ["MossLogicTargetArray",[],true];
+_logic setVariable ["MossLogicTargetArray",[],true];
 
 //Get the objects that are synced to the logic.
-_synced_objects_logic = synchronizedObjects _logicname;
-
-//Error Message.
-if (count (_synced_objects_logic) < 2) exitWith
-{
-	[
-		"Error: Make sure to sync all signs and targets to the logic in the editor."
-	] call BIS_fnc_errorMsg;
-};
+_synced_objects_logic = synchronizedObjects _logic;
 
 //Use Target's lane number to make a unique variable for the texture.
-_logicname = ([( str _logicname),11,12] call BIS_fnc_trimString);
+_logicname = ([( str _logic),11,12] call BIS_fnc_trimString);
 
 //Make unique variable.
 _texturename = format ["pics\Range\%1.jpg",_logicname];
@@ -55,10 +43,10 @@ _texturename = format ["pics\Range\%1.jpg",_logicname];
 _target = 0;
 _FallingTargets = 0;
 _PlateTargets = 0;
-_sign = "";
-_table = "";
-_box = "";
-_monitor = "";
+_sign = objNull;
+_table = objNull;
+_box = objNull;
+_monitor = objNull;
 
 //Init all the objects.
 {
@@ -130,21 +118,54 @@ _monitor = "";
 	};
 } foreach _synced_objects_logic;
 
+//If target exists of type MOSS_TargetObject exists:
 if (typeName _target != "SCALAR") then
 {
-	[_target,_logicname] call Moss_fnc_TargetInit;
-	[_sign,_logicname] call Moss_fnc_TargetSignInit;
-	[_table,"rifle"] call Moss_fnc_WeaponOnTable;
-	_box addMagazineCargo [MOSS_Magazine,30];
-	[_monitor,_logicname] call Moss_fnc_CameraInit;
+	//If an item exists, initialize it:
+	
+	//Warning of missing target:
+	if (isNull _target) then
+	{
+		[
+			"Error: There's no target of the correct type synced to the logic. Make sure you use the right sign as target."
+		] call BIS_fnc_errorMsg;
+	};
+	
+	if (!isNull _target) then
+	{
+		[_target,_logic] call Moss_fnc_TargetInit;
+	};
+	
+	//Warning of missing sign:
+	if (isNull _sign) then
+	{
+		[
+			"Error: There's no sign to register shooter, thus no way to keep score. The targets will work but not optimally."
+		] call BIS_fnc_errorMsg;
+	};
+	
+	if (!isNull _sign) then
+	{
+		[_sign,_logic,_monitor] call Moss_fnc_TargetSignInit;
+	};
+	
+	if (!isNull _table) then
+	{
+		[_table,_weapon,_box] call Moss_fnc_WeaponOnTable;
+	};
+	
+	if (!isNull _monitor) then
+	{
+		["","","",[_monitor,_logic]] call Moss_fnc_CameraInit;
+	};
 };
-
+if true exitWith {};
 if (typeName _FallingTargets != "SCALAR") then
 {
 	{
-		[_x,_logicname] call Moss_fnc_FallingTargetInit;
+		[_x,_logic] call Moss_fnc_FallingTargetInit;
 	} foreach _FallingTargets;
-	[_sign,_logicname] call Moss_fnc_FallingSignInit;
+	[_sign,_logic] call Moss_fnc_FallingSignInit;
 	[_table,"pistol"] call Moss_fnc_WeaponOnTable;
 	_box addMagazineCargo [MOSS_PMagazine,30];
 };
@@ -152,13 +173,9 @@ if (typeName _FallingTargets != "SCALAR") then
 if (typeName _PlateTargets != "SCALAR") then
 {
 	{
-		[_x,_logicname] call Moss_fnc_FallingTargetInit;
+		[_x,_logic] call Moss_fnc_FallingTargetInit;
 	} foreach _PlateTargets;
-	[_sign,_logicname] call Moss_fnc_FallingSignInit;
+	[_sign,_logic] call Moss_fnc_FallingSignInit;
 	[_table,"pistol"] call Moss_fnc_WeaponOnTable;
 	_box addMagazineCargo [MOSS_PMagazine,30];
 };
-
-/*
-
-*/

@@ -6,31 +6,31 @@
 
 	Parameter(s):
 		0:	Target Object.
-		1:	Name of Logic associated with Lane.
+		1:	Logic Object.
 	
 	Usage:
 	0 = [this,Logic_Name] call Moss_fnc_CameraInit;
 */
-private ["_object","_LogicName","_LogicTargetArray"];
-_object = _this select 0;
-_LogicName = _this select 1;
 
-call compile format ['
-	[{ systemChat "CAMERA: %1, %2"; }, "BIS_fnc_Spawn", true, false, false] call BIS_fnc_MP;
-	',_object,_LogicName
-];
-if true exitWith {};
-_object allowDamage false;
+private ["_object","_logic","_LogicTargetArray"];
+_object = [(_this select 3), 0, objNull, [objNull]] call BIS_fnc_param;
+_logic = [(_this select 3), 1, objNull, [objNull]] call BIS_fnc_param;
 
-//Error Message.
-if (isNull _LogicName) exitWith
+//Check if camera already exists:
+_cam = _logic getVariable "MossTargetCameraName";
+//Destroy existing camera:
+
+if (!isNull (_logic getVariable "MossTargetCameraName")) then
 {
-	[
-		"No logic exists that was passed as a parameter to the function! Make sure the logic exists and is synced to the targets!"
-	] call BIS_fnc_errorMsg;
+	_cam cameraEffect ["terminate","back"];
+	camDestroy _cam;
+	_object setObjectTexture [0,""];
+	_logic setVariable ["MossTargetCameraName",nil,true];
 };
 
-_LogicTargetArray = _LogicName getVariable "MossLogicTargetArray";
+_object allowDamage false;
+
+_LogicTargetArray = _logic GetVariable "MossLogicTargetArray";
 
 _whilevariable = true;
 
@@ -61,8 +61,6 @@ _targetstring = str ([( str _target),2] call BIS_fnc_trimString);
 //Make unique variable.
 _rtt = format ["rendertarget%1",_targetstring];
 
-GLOBAL_RTT = _rtt;
-
 //Create camera.
 _cam = "camera" camCreate (_target modelToWorld [0,-1.5,0.8]);
 _cam camPrepareFov 0.450;
@@ -73,7 +71,4 @@ _cam cameraEffect ["INTERNAL", "BACK", _rtt];
 //Assign texture to sign.
 _object setObjectTexture [0, (format ["#(argb,256,256,1)r2t(%1,1.0)",_rtt])];  
 
-/*
-_cam cameraEffect ["terminate","back"];
-camDestroy _cam;
-*/
+_logic setVariable ["MossTargetCameraName",_cam,true];
