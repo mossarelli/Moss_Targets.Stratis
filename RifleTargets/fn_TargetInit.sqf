@@ -12,31 +12,23 @@
 	0 = [this,Logic_Name] call Moss_fnc_TargetInit;
 */
 
-private ["_object","_LogicName","_LogicTargetArray"];
-_object = _this select 0;
-_LogicName = _this select 1;
+private ["_object","_logicname","_LogicTargetArray"];
+_object = [_this, 0, objNull, [objNull]] call BIS_fnc_param;
+_logicname = [_this, 1, objNull, [objNull]] call BIS_fnc_param;
 
-//_object allowDamage false;
-
-//Error Message.
-if (isNull _LogicName) exitWith
-{
-	[
-		"No logic exists that was passed as a parameter to the function! Make sure the logic exists and is synced to the targets!"
-	] call BIS_fnc_errorMsg;
-};
+_object allowDamage false;
 
 //Make sure Target knows its logic's name
-_object setVariable ["MossTargetLogicName",_LogicName,false];
+_object setVariable ["MossTargetLogicName",_logicname,false];
 
 //Add Current target to Logic's Array variable
-_LogicTargetArray = _LogicName getVariable "MossLogicTargetArray";
+_LogicTargetArray = _logicname getVariable "MossLogicTargetArray";
 
 //Make sure the target object is not in the array and then add it.
 if ( ! ( str (_object) in _LogicTargetArray) ) then
 {
 	_LogicTargetArray set [(count _LogicTargetArray),_object];
-	_LogicName setVariable ["MossLogicTargetArray",_LogicTargetArray,true];
+	_logicname setVariable ["MossLogicTargetArray",_LogicTargetArray,true];
 };
 
 //Set the texture on the object.
@@ -50,8 +42,8 @@ _object addEventHandler
 {
 	_target = (_this select 0 select 0);
 	_shooter = (_this select 0 select 1);
-	_LogicNameTarget = _target getVariable ["MossTargetLogicName","Null"];
-	_LogicNameShooter = _shooter getVariable ["MossPlayerLogicName","Nullify"];
+	_logicnameTarget = _target getVariable ["MossTargetLogicName","Null"];
+	_logicnameShooter = _shooter getVariable ["MossPlayerLogicName","Nullify"];
 	
 	//Create orange markers where the bullet hit. Turn this off in MainInit.
 	if (MOSS_TargetMarkers) then
@@ -66,7 +58,7 @@ _object addEventHandler
 	};
 	
 	//Make sure the lane logic is the same object for both player and target.
-	if ( str _LogicNameTarget != str _LogicNameShooter ) exitWith { };
+	if ( str _logicnameTarget != str _logicnameShooter ) exitWith { };
 	
 	//Grab score data.
 	_array = _shooter getVariable "MossShooterScoreInfo";

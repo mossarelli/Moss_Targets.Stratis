@@ -9,13 +9,17 @@
 		1:	Name of Logic associated with Lane.
 	
 	Usage:
-	0 = [this,Logic_Name] call Moss_fnc_TargetInit;
+	0 = [this,Logic_Name] call Moss_fnc_CameraInit;
 */
-
 private ["_object","_LogicName","_LogicTargetArray"];
 _object = _this select 0;
 _LogicName = _this select 1;
 
+call compile format ['
+	[{ systemChat "CAMERA: %1, %2"; }, "BIS_fnc_Spawn", true, false, false] call BIS_fnc_MP;
+	',_object,_LogicName
+];
+if true exitWith {};
 _object allowDamage false;
 
 //Error Message.
@@ -56,6 +60,8 @@ _targetstring = str ([( str _target),2] call BIS_fnc_trimString);
 
 //Make unique variable.
 _rtt = format ["rendertarget%1",_targetstring];
+
+GLOBAL_RTT = _rtt;
 
 //Create camera.
 _cam = "camera" camCreate (_target modelToWorld [0,-1.5,0.8]);

@@ -110,8 +110,8 @@ class Mission
 				items=1;
 				class Item0
 				{
-					position[]={6377.6211,7.9846878,5389.063};
-					azimut=231.09868;
+					position[]={6383.9873,9,5431.7207};
+					azimut=285.4838;
 					id=2;
 					side="WEST";
 					vehicle="B_spotter_F";
@@ -296,7 +296,6 @@ class Mission
 					leader=1;
 					skill=0.60000002;
 					text="Logic_Lane_10";
-					init="0 = [this] call Moss_fnc_LogicInit;";
 					syncId=9;
 					synchronizations[]={67,65,66,69,70,68};
 				};

@@ -37,6 +37,6 @@ player setVariable ["MossPlayerLogicName",_params,false];
 
 //Make a global message for everyone to see.
 call compile format ['
-[{ systemChat "%1: %2 Registered. Score Reset."; }, "BIS_fnc_Spawn", true, false, false] call BIS_fnc_MP;
-',(_params getVariable "MossRangeNumber"),(name _caller)
+	[{ systemChat "%1: %2 Registered. Score Reset."; }, "BIS_fnc_Spawn", true, false, false] call BIS_fnc_MP;
+	',(_params getVariable "MossRangeNumber"),(name _caller)
 ];

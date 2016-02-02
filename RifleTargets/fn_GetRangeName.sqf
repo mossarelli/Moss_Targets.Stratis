@@ -11,8 +11,6 @@
 	N/A
 */
 
-#include "RangeNamesConfig.sqf"
-
 {
 	(_x select 0) setVariable ["MossRangeNumber",(_x select 1),true];
 } foreach Moss_ListOfLanes;
